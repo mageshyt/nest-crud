@@ -3,10 +3,14 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { UserService } from '@/user/user.service';
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
-  async singIn(dto: AuthDto) {
+  constructor(
+    private prisma: PrismaService,
+    private user: UserService,
+  ) {}
+  async singUp(dto: AuthDto) {
     try {
       // generate the password
       const password = await argon.hash(dto.password);
@@ -30,7 +34,7 @@ export class AuthService {
       // return the saved user
       return {
         user: res,
-        message: 'Login Function',
+        message: 'Created Successfully',
       };
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
@@ -41,13 +45,30 @@ export class AuthService {
       throw err;
     }
   }
-  async singUp() {
+  async singIn(dto: AuthDto) {
     try {
       // find the user in the db
+      const user = await this.user.getUserByEmail(dto.email);
+
       //  if user not exist throw error
+      if (!user) {
+        throw new ForbiddenException('Email or password is incorrect');
+      }
       //  if user exist compare the password
+      const isMatch = await argon.verify(user.password, dto.password);
+
       //  if password not match throw error
+      if (!isMatch) {
+        throw new ForbiddenException('Email or password is incorrect');
+      }
       //  if password match return the user
-    } catch (error) {}
+      delete user.password;
+      return {
+        user,
+        message: 'Login Function',
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }
