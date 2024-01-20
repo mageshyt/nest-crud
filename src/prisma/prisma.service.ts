@@ -9,9 +9,15 @@ export class PrismaService extends PrismaClient {
       errorFormat: 'pretty',
       datasources: {
         db: {
-          url: process.env.POSTGRES_URL_NON_POOLING,
+          url: process.env.DATABASE_URL,
         },
       },
     });
+  }
+  cleanDb() {
+    return this.$transaction([
+      this.bookMark.deleteMany(),
+      this.user.deleteMany(),
+    ]);
   }
 }

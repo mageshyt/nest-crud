@@ -34,6 +34,7 @@ export class BookmarkService {
     updateBookmarkDto: UpdateBookmarkDto,
     userId: number,
   ) {
+    console.log({ id, updateBookmarkDto, userId });
     try {
       //   check if the user is the owner of the bookmark
       const bookmark = await this.prisma.bookMark.findUnique({
@@ -44,6 +45,7 @@ export class BookmarkService {
           userId: true,
         },
       });
+      console.log({ bookmark });
 
       if (bookmark.userId !== userId)
         throw new ForbiddenException('You are not the owner of this bookmark');
