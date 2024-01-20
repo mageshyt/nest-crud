@@ -5,9 +5,9 @@ import { AuthModule } from './auth/auth.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserService } from './user/user.service';
-
+import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports: [AuthModule, BookmarkModule, PrismaModule],
+  imports: [ConfigModule.forRoot({}), AuthModule, BookmarkModule, PrismaModule],
   controllers: [AppController],
   providers: [AppService, UserService],
 })
