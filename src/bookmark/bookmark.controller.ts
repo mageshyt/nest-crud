@@ -11,8 +11,8 @@ import {
 import { BookmarkService } from './bookmark.service';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 import { UpdateBookmarkDto } from './dto/update-bookmark.dto';
-import { GetUser } from '@/auth/decorators';
-import { JwtGuard } from '@/guards';
+import { GetUser } from '../auth/decorators';
+import { JwtGuard } from '../guards';
 
 @Controller('bookmark')
 export class BookmarkController {
