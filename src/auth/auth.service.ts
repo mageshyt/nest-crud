@@ -1,14 +1,21 @@
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service';
+
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaService } from '@/prisma/prisma.service';
+
 import { UserService } from '@/user/user.service';
+
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private user: UserService,
+    private jwt: JwtService,
+    private config: ConfigService,
   ) {}
   async singUp(dto: AuthDto) {
     try {
@@ -61,14 +68,23 @@ export class AuthService {
       if (!isMatch) {
         throw new ForbiddenException('Email or password is incorrect');
       }
-      //  if password match return the user
-      delete user.password;
       return {
+        success: "You're logged in successfully",
         user,
-        message: 'Login Function',
+        token: await this.singToken(user.id, user.email, 'user'),
       };
     } catch (error) {
       throw error;
     }
+  }
+
+  singToken(userId: number, email: string, role: string) {
+    const payload = { sub: userId, email, role };
+    const secret = this.config.get('JWT_SECRET');
+
+    return this.jwt.signAsync(payload, {
+      secret: secret,
+      expiresIn: '15m',
+    });
   }
 }
