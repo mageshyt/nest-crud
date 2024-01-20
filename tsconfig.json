@@ -16,6 +16,30 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@config/*": ["src/config/*"],
+      "@constants/*": ["src/constants/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@database/*": ["src/database/*"],
+      "@decorators/*": ["src/decorators/*"],
+      "@entities/*": ["src/entities/*"],
+      "@enums/*": ["src/enums/*"],
+      "@errors/*": ["src/errors/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@models/*": ["src/models/*"],
+      "@modules/*": ["src/modules/*"],
+      "@providers/*": ["src/providers/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@routes/*": ["src/routes/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"],
+      "@validations/*": ["src/validations/*"],
+    },
+  },
 }
