@@ -7,12 +7,19 @@ import {
   Param,
   Delete,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BookmarkService } from './bookmark.service';
-import { CreateBookmarkDto } from './dto/create-bookmark.dto';
+import {
+  CreateBookmarkDto,
+  UpdateBookmarkDto2,
+} from './dto/create-bookmark.dto';
 import { UpdateBookmarkDto } from './dto/update-bookmark.dto';
 import { GetUser } from '@/auth/decorators';
 import { JwtGuard } from '@/guards';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FormDataRequest } from 'nestjs-form-data';
 
 @Controller('bookmark')
 export class BookmarkController {
@@ -50,5 +57,17 @@ export class BookmarkController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.bookmarkService.remove(+id);
+  }
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+  }
+
+  @Post('update2')
+  @FormDataRequest()
+  getHello(@Body() testDto: UpdateBookmarkDto2) {
+    console.log(testDto);
+    return testDto;
   }
 }
