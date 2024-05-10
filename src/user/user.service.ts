@@ -11,12 +11,6 @@ export class UserService {
         where: {
           id,
         },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          bookmarks: true,
-        },
       });
     } catch (err) {
       throw err;
